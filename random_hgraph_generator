@@ -2,7 +2,7 @@ def rand_hgraf(n,m,d):
     E = np.random.randint(2,d+1,size=(m))
     M = np.arange(m)
     N = np.arange(n)
-    A = np.zeros((n,m))
+    A = np.zeros((n,m)) #Incident matrix
     
     for j in M:
         t = 0
