@@ -1,0 +1,45 @@
+#Nodes in the intersection between two hyperedges
+def inter(A,e1,e2):
+    I = A[:,e1]+A[:,e2]
+    i = np.where(I>1)[0]
+    return i
+  
+#Hyperedges in cycles (based on algorithm to find cycles in graphs)
+def find_cycles(graph):
+    def dfs(node,parent,visited,current_cycle):
+        visited[node] = True
+        current_cycle.append(node)
+        for neighbor in graph[node]:
+            if neighbor != parent:
+                if visited[neighbor]:
+                    if neighbor in current_cycle:
+                        cycles.append(current_cycle[current_cycle.index(neighbor):])
+                else:
+                    dfs(neighbor, node, visited, list(current_cycle))
+    visited = {node: False for node in graph}
+    cycles = []
+    for node in graph:
+        if not visited[node]:
+            dfs(node, None, visited, [])
+    return cycles
+
+def ciclos(A,P):
+    n_int = set([inter(A,x,y)[0] for x in P for y in P if len(inter(A,x,y))>0 and x!=y])
+    adjv = {i: [] for i in n_int}
+    for x in P:
+        for y in P:
+            if x!=y:
+                if len(inter(A,x,y))>0:
+                    adjv[inter(A,x,y)[0]].append('e{}'.format(x))
+    for x in adjv:
+        adjv[x]=set(adjv[x])
+    part = ['e{}'.format(x) for x in P]
+    adjh = {x:[y for y in adjv.keys() if x in adjv[y]] for x in part}
+    
+    #Graph built with hyperedges in P y nodes in intersections
+    graph = {}
+    graph.update(adjh)
+    graph.update(adjv)
+    cy = find_cycles(graph)
+    
+    return [[x for x in cy[y] if type(x)==str] for y in range(len(cy))]
