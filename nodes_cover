@@ -1,0 +1,8 @@
+#Nodes covered by hyperedges h
+def vert_cover(A,h):
+    n = A.shape[0]
+    S= np.zeros(n)
+    for j in h:
+        S += A[:,j]
+    vc = np.where(S!=0)[0]
+    return len(vc)
