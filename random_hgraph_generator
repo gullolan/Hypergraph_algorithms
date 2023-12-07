@@ -1,0 +1,13 @@
+def rand_hgraf(n,m,d):
+    E = np.random.randint(2,d+1,size=(m))
+    M = np.arange(m)
+    N = np.arange(n)
+    A = np.zeros((n,m))
+    
+    for j in M:
+        t = 0
+        while t < E[j]:
+            s = int(np.random.choice(N,size=1))
+            A[s,j] = 1
+            t = np.sum(A[:,j])
+    return A
